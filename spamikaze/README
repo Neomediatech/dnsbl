@@ -1,3 +1,5 @@
+Inspired from https://github.com/rikvanriel/spamikaze and modified to fit our needs and today technologies (PHP 7+)
+
 Spamikaze - an automatic spam blacklist system
 Version 0.3
 
