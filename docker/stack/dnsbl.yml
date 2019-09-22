@@ -1,5 +1,6 @@
 # dnsbl stack
-# pull spamikaze from https://github.com/Neomediatech/spamikaze/archive/master.zip and put it on common volume
+# pull dnsbl git repository from https://github.com/Neomediatech/dnsbl/archive/master.zip ,
+#   unzip it and put spamikaze folder on common volume
 # may be config/config.php file must be moved in php/ direcotry?
 version: '3.7'
 
