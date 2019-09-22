@@ -14,6 +14,11 @@ services:
     deploy:
       replicas: 1    
     command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW
+    ports:
+      - target: 3306
+        published: 23307
+        protocol: tcp
+        mode: host
     volumes:
       - db:/var/lib/mysql
       - sql_init:/docker-entrypoint-initdb.d
