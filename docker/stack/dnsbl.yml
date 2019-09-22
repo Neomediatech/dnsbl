@@ -89,3 +89,23 @@ services:
 
 volumes:
   redis_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /srv/data/dnsbl-docker-app/redis/data
+
+  db:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /srv/data/dnsbl-docker-app/db/data
+
+  scripts:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /srv/data/dnsbl-docker-app/scripts/data
+      
