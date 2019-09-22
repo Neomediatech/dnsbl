@@ -1,0 +1,36 @@
+Spamikaze - an automatic spam blacklist system
+Version 0.3
+
+Content
+
+What is Spamikaze?
+Software Requirements
+
+What is Spamikaze?
+==================
+
+Spamikaze is a set of scripts that will help you to automate
+spamblocking.
+
+The idea behind Spamikaze is to offer people running mailservers
+a set of scripts that will not only block spam but will allow 
+persons that get blocked to delist.  This process is completely
+automated and could be done by running their own DNSBL or mailserver.
+
+You can find more information on the Spamikaze web site:
+
+http://spamikaze.org/
+
+
+Software Requirements
+=====================
+Any *nix based box with the following software should be able to
+run:
+
+1. A database server (MySQL or PostgresQL)
+2. A webserver able to handle cgi scripts (perl) or php scripts.
+3. Perl with the following module(s):
+    DBI, CGI
+
+And optional:
+1. A nameserver

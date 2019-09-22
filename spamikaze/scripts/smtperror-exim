@@ -1,0 +1,53 @@
+#!/usr/bin/perl
+
+# smtperror-exim
+#
+# Copyright (C) 2003 Hans Wolters <h-wolters@nl.linux.org>
+# Copyright (C) 2003 Rik van Riel <riel@surriel.com>
+# Copyright (C) 2004 Hans Spaans  <cj.spaans@nexit.nl>
+# Released under the GNU GPL
+#
+# NO WARRANTY, see the file COPYING for details.
+#
+# This file is part of the spamikaze project:
+#     http://spamikaze.org/
+use strict;
+use warnings;
+use FindBin;
+use Net::DNS;
+use lib "$FindBin::Bin";
+use File::Tail;
+
+use Spamikaze;
+
+sub parselog
+{
+	my ( $line ) = @_;
+	my $ip = '';
+
+	if ($line =~ /SMTP protocol violation: synchronization error.*from H=\[((\d{1,3}\.){3}\d{1,3})\]/) {
+		$ip = $1;
+	} elsif ($line =~ /SMTP protocol violation: synchronization error.* \[((\d{1,3}\.){3}\d{1,3})\] next input=/) {
+		$ip = $1;
+	} elsif ($line =~ /SMTP protocol error in .AUTH LOGIN.* \[((\d{1,3}\.){3}\d{1,3})\]/) {
+		$ip = $1;
+	}
+
+	return $ip;
+}
+
+sub main
+{
+	my $file = File::Tail->new("/var/log/exim/main.log");
+	my $line;
+
+	while (defined($line=$file->read)) {
+		my $ip = parselog($line);
+		if (defined($ip) and $ip ne '' and
+					 !Spamikaze::whitelisted($ip)) {
+			$Spamikaze::db->storeip($ip, 'major smtp violation');
+		}
+	}
+}
+
+&main;
