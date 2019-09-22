@@ -18,8 +18,8 @@ The project use this folder structure to host persistent data:
 This folders must exists prior to start the stack.
 
 ## Installation
-1. Create folder structure on the host:
-` base_folder="/srv/data/docker/containers/dnsbl-docker-app" ; mkdir -p $base_folder && cd $base_folder ; mkdir -p redis/data db/data scripts/data web/nginx/conf `
+1. Create folder structure on the host:   
+` base_folder="/srv/data/docker/containers/dnsbl-docker-app" ; mkdir -p $base_folder && cd $base_folder ; mkdir -p redis/data db/data scripts/data web/nginx/conf ; chmod 777 redis/data db/data `
 2. Run sql query to populate database, see it on [sql folder](sql/)
 
 ## ToDo
