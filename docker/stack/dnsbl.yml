@@ -1,0 +1,91 @@
+# dnsbl stack
+# pull spamikaze from https://github.com/Neomediatech/spamikaze/archive/master.zip and put it on common volume
+# may be config/config.php file must be moved in php/ direcotry?
+version: '3.7'
+
+x-environment: &common-vars
+    TZ: Europe/Rome
+
+services:
+  db:
+    image: mariadb:10
+    hostname: db
+    deploy:
+      replicas: 1    
+    command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW
+    volumes:
+      - db:/var/lib/mysql
+    environment:
+      << : *common-vars
+      MYSQL_ROOT_PASSWORD_FILE: /var/lib/mysql/db-root.pwd
+      MYSQL_PASSWORD_FILE: /var/lib/mysql/db-dnsbl.pwd
+      MYSQL_DATABASE_FILE: /var/lib/mysql/db-name.txt
+      MYSQL_USER_FILE: /var/lib/mysql/db-user.txt
+    healthcheck:
+      test: ["CMD", "/bin/bash", "-c", "read p < $$MYSQL_PASSWORD_FILE ; read u < $$MYSQL_USER_FILE ; mysql -p$$p -u$$u -e status | grep Uptime || (echo \"MariaDB is down\" && exit 1)"]
+      interval: 30s
+      timeout: 30s
+      start_period: 5s
+      retries: 20
+    stop_grace_period: 20s
+
+  redis:
+    image: redis:5-alpine
+    hostname: redis
+    environment:
+      << : *common-vars
+    command: ["redis-server", "--appendonly", "yes", "--bind", "0.0.0.0", "--protected-mode", "no", "--always-show-logo", "no", "--appendfsync", "no"]
+    ports:
+      - target: 6379
+        published: 6479
+        protocol: tcp
+        mode: host
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 10s
+      retries: 3
+
+  app:
+    image: neomediatech/php-fpm-debian:latest
+    hostname: app
+    volumes:
+      - scripts:/var/www/html
+    environment:
+      << : *common-vars
+    depends_on:
+      - db
+    stop_grace_period: 20s
+
+  web:
+    image: nginx:1.16
+    deploy:
+      replicas: 1    
+    environment:
+      << : *common-vars    
+    ports:
+      - target: 80
+        published: 28080
+        protocol: tcp
+        mode: host
+    volumes:
+      - scripts:/var/www/html:ro
+      - /srv/data/dnsbl-docker-app/web/nginx/conf/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - app
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    environment:
+      << : *common-vars    
+      PMA_HOST: db
+      PMA_PORT: 3306
+    ports:
+      - '28081:80'
+    depends_on:
+      - db
+
+volumes:
+  redis_data:
