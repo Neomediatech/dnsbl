@@ -32,6 +32,4 @@ CREATE TABLE IF NOT EXISTS `whitelist` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
-INSERT INTO `whitelist` (`id`, `ip`, `date`, `epoc`, `comment`) VALUES
-(1, '200.200.200.200', '2019-09-22 13:09:38', '2019-09-22 11:09:38', NULL);
 COMMIT;
