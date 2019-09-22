@@ -39,10 +39,4 @@ This folders must exists prior to start the stack.
   rm -r dnsbl-master master.zip   
 
 ## ToDo
-1. web interface
-2. docker images
-3. docker stack
-4. php scripts for
-   - delisting requests
-   - show records
-   - admin maintanance
+see [issues](https://github.com/Neomediatech/dnsbl/issues?q=is%3Aopen+is%3Aissue+label%3Aenhancement)
