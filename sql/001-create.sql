@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS `blacklist` (
   `rev_ip` varchar(255)  NULL,
   `helo` varchar(255)  NULL,
   `spam_flag` varchar(255)  NULL,
-  `spam_point` decimal(10,0) NULL,
+  `spam_point` varchar(10) NULL,
   `spam_report` text  NULL,
   `alert_service` varchar(255)  NULL,
   `alert_server` varchar(255)  NULL,
