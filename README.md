@@ -19,8 +19,10 @@ This folders must exists prior to start the stack.
 
 ## Installation
 1. Create folder structure on the host:   
-` base_folder="/srv/data/docker/containers/dnsbl-docker-app" ; mkdir -p $base_folder && cd $base_folder ; mkdir -p redis/data db/data scripts/data web/nginx/conf ; chmod 777 redis/data db/data `
-2. Run sql query to populate database, see it on [sql folder](sql/)
+` base_folder="/srv/data/docker/containers/dnsbl-docker-app" ; mkdir -p $base_folder && cd $base_folder ; mkdir -p redis/data db/data scripts/data web/nginx/conf ; chmod 777 redis/data db/data `   
+2. Pull this repo, unpack and move spamikaze folder in scripts/data:   
+` cd /srv/data/docker/containers/dnsbl-docker-app/scripts/data ; wget https://github.com/Neomediatech/dnsbl/archive/master.zip ; unzip master.zip ; mv dnsbl-master/spamikaze . ; rm -r dnsbl-master master.zip `   
+9. Run sql query to populate database, see it on [sql folder](sql/)
 
 ## ToDo
 1. web interface
