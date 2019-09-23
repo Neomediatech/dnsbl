@@ -1,4 +1,5 @@
 #!/bin/bash
+# This script generates SSL certificate files for MariaDB server and client
 
 for file in ca-key.pem  ca.pem  client-cert.pem client-key.pem  client-req.pem  server-cert.pem  server-key.pem  server-req.pem; do
 	[ -f /var/lib/mysql/$file ] || missing=1
