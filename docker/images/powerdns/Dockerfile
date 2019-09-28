@@ -32,11 +32,16 @@ RUN apk --update upgrade && \
 
 FROM alpine
 
-ENV VERSION=4.2.0
-ENV BUILD_DATE=2019-09-28
-
-ENV TZ=Europe/Rome
-
+ENV VERSION=4.2.0 \
+    BUILD_DATE=2019-09-28 \
+    TZ=Europe/Rome
+    MYSQL_AUTOCONF=true \
+    MYSQL_HOST="mysql" \
+    MYSQL_PORT="3306" \
+    MYSQL_USER="root" \
+    MYSQL_PASS="root" \
+    MYSQL_DB="pdns"
+    
 LABEL maintainer="docker-dario@neomediatech.it" \ 
       org.label-schema.version=$VERSION \
       org.label-schema.build-date=$BUILD_DATE \
@@ -67,5 +72,10 @@ COPY --from=builder /etc/pdns /etc/pdns/
 RUN cp -p /etc/pdns/pdns.conf-dist /etc/pdns/pdns.conf && \
     /usr/local/sbin/pdns_server --version || [ $? -eq 99 ]
 
-ENTRYPOINT ["/usr/local/sbin/pdns_server"]
-CMD ["--help"]
+ADD schema.sql pdns.conf /etc/pdns/
+ADD entrypoint.sh /
+RUN chmod +x /entrypoint.sh
+#ENTRYPOINT ["/usr/local/sbin/pdns_server"]
+#CMD ["--help"]
+
+ENTRYPOINT ["/entrypoint.sh"]
