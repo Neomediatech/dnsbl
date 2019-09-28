@@ -38,5 +38,8 @@ This folders must exists prior to start the stack.
 16. Cleaning:   
   rm -r dnsbl-master master.zip   
 
+### PowerDNS as DNS server
+see https://github.com/Neomediatech/powerdns-docker
+
 ## ToDo
 see [issues](https://github.com/Neomediatech/dnsbl/issues?q=is%3Aopen+is%3Aissue+label%3Aenhancement)
