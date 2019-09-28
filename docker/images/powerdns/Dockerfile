@@ -34,7 +34,7 @@ FROM alpine
 
 ENV VERSION=4.2.0 \
     BUILD_DATE=2019-09-28 \
-    TZ=Europe/Rome
+    TZ=Europe/Rome \
     MYSQL_AUTOCONF=true \
     MYSQL_HOST="mysql" \
     MYSQL_PORT="3306" \
