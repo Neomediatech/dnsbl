@@ -6,8 +6,8 @@ RUN apk --update upgrade && \
     apk add ca-certificates curl jq && \
     apk add --virtual .build-depends \
       file gnupg g++ make \
-      boost-dev openssl-dev libsodium-dev lua-dev net-snmp-dev protobuf-dev \
-      mariadb-dev postgresql-dev sqlite-dev geoip-dev yaml-cpp-dev && \
+      boost-dev openssl-dev \
+      mariadb-dev yaml-cpp-dev && \
     [ -n "$AUTH_VERSION" ] || { curl -sSL 'https://api.github.com/repos/PowerDNS/pdns/tags?per_page=100&page={1,2}' | jq -rs '[.[][]]|map(select(has("name")))|map(select(.name|contains("auth-")))|map(.version=(.name|ltrimstr("auth-")))|map(select(true != (.version|contains("-"))))|map(.version)|"AUTH_VERSION="+.[0]' > /tmp/latest-auth-tag.sh && . /tmp/latest-auth-tag.sh; } && \
     mkdir -v -m 0700 -p /root/.gnupg && \
     curl -RL -O 'https://www.powerdns.com/powerdns-keyblock.asc' && \
@@ -22,9 +22,10 @@ RUN apk --update upgrade && \
     ( \
         cd "pdns-${AUTH_VERSION}" && \
         ./configure --sysconfdir=/etc/pdns --mandir=/usr/share/man \
-            --enable-libsodium --with-sqlite3 --enable-tools \
-            --with-modules='bind gsqlite3' \
-            --with-dynmodules='geoip gmysql gpgsql lua pipe random remote' && \
+            --enable-tools \
+            --with-modules='' \
+            --without-lua --disable-lua-records \ 
+            --with-dynmodules='gmysql' && \
         make -j 2 && \
         make install-strip \
     ) && \
@@ -50,11 +51,12 @@ LABEL maintainer="docker-dario@neomediatech.it" \
       org.label-schema.maintainer=Neomediatech
 
 RUN apk --update upgrade && \
-    apk add ca-certificates curl less man \
+    apk add ca-certificates curl less \
         boost-program_options \
-        openssl libsodium lua net-snmp protobuf \
-        mariadb-connector-c libpq sqlite-libs \
-        geoip yaml-cpp && \
+        openssl \
+        mariadb-connector-c libpq \
+        mariadb-client \
+        yaml-cpp && \
     rm -rf /var/cache/apk/*
 
 ENV PAGER less
