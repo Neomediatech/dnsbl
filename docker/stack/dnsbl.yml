@@ -90,7 +90,10 @@ services:
       PMA_HOST: db
       PMA_PORT: 3306
     ports:
-      - '28081:80'
+      - target: 80
+        published: 28081
+        protocol: tcp
+        mode: host
     depends_on:
       - db
 
