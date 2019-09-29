@@ -128,6 +128,22 @@ services:
     depends_on:
       - db
 
+  pdnsmanager:
+    image: neomediatech/pdnsmanager
+    hostname: pdnsmanager
+    environment:
+      << : *common-vars    
+    ports:
+      - target: 80
+        published: 28080
+        protocol: tcp
+        mode: host
+    volumes:
+      - /srv/data/docker/containers/dnsbl-docker-app/pdnsmanager/config/:/etc/pdnsmanager/
+    depends_on:
+      - db
+      - powerdns
+
 volumes:
   redis_data:
     driver: local
