@@ -96,6 +96,8 @@ services:
         published: 28081
         protocol: tcp
         mode: host
+    volumes:
+      - db:/var/lib/mysql
     depends_on:
       - db
 
