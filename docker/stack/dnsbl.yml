@@ -135,7 +135,7 @@ services:
       << : *common-vars    
     ports:
       - target: 80
-        published: 28080
+        published: 28082
         protocol: tcp
         mode: host
     volumes:
