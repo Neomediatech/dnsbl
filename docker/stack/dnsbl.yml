@@ -106,10 +106,8 @@ services:
     hostname: powerdns
     environment:
       << : *common-vars    
-      MYSQL_HOST: db
-      MYSQL_USER:
-      MYSQL_PASS:
-      MYSQL_DB: pdns
+      DB_HOST: db
+      DB_NAME: pdns
     ports:
       - target: 53
         published: 28053
@@ -119,8 +117,6 @@ services:
         published: 28053
         protocol: udp
         mode: host
-    volumes:
-      - db:/var/lib/mysql
     depends_on:
       - db
 
