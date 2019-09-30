@@ -117,6 +117,8 @@ services:
         published: 28053
         protocol: udp
         mode: host
+    volumes:
+      - sql_init:/data/sql
     depends_on:
       - db
 
