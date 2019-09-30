@@ -6,6 +6,9 @@ version: '3.7'
 
 x-environment: &common-vars
     TZ: Europe/Rome
+      MYSQL_ROOT_PASSWORD_FILE: /var/lib/mysql/db-root.pwd
+      MYSQL_PASSWORD_FILE: /var/lib/mysql/db-user.pwd
+      MYSQL_USER_FILE: /var/lib/mysql/db-user.txt
 
 services:
   db:
@@ -24,10 +27,7 @@ services:
       - sql_init:/docker-entrypoint-initdb.d
     environment:
       << : *common-vars
-      MYSQL_ROOT_PASSWORD_FILE: /var/lib/mysql/db-root.pwd
-      MYSQL_PASSWORD_FILE: /var/lib/mysql/db-dnsbl.pwd
       MYSQL_DATABASE_FILE: /var/lib/mysql/db-name.txt
-      MYSQL_USER_FILE: /var/lib/mysql/db-user.txt
     healthcheck:
       test: ["CMD", "/bin/bash", "-c", "read p < $$MYSQL_PASSWORD_FILE ; read u < $$MYSQL_USER_FILE ; mysql -p$$p -u$$u -e status | grep Uptime || (echo \"MariaDB is down\" && exit 1)"]
       interval: 30s
@@ -106,14 +106,10 @@ services:
     hostname: powerdns
     environment:
       << : *common-vars    
-      MYSQL_AUTOCONF: "true"
-      MYSQL_PASSWORD_FILE: /var/lib/mysql/db-dnsbl.pwd
-      MYSQL_DATABASE_FILE: /var/lib/mysql/db-name.txt
-      MYSQL_USER_FILE: /var/lib/mysql/db-user.txt
       MYSQL_HOST: db
       MYSQL_USER:
       MYSQL_PASS:
-      MYSQL_DB:
+      MYSQL_DB: pdns
     ports:
       - target: 53
         published: 28053
