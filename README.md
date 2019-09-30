@@ -29,7 +29,7 @@ This folders must exists prior to start the stack.
 ```
    db/data/db-name.txt    -> database name
    db/data/db-user.txt    -> name for the database user
-   db/data/db-dnsbl.pwd   -> password for the database user
+   db/data/db-user.pwd   -> password for the database user
    db/data/db-root.pwd    -> password for the mysql/mariadb root user    
 ```   
 5. Move sql/sh files in db/sql:
