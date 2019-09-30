@@ -118,7 +118,8 @@ services:
         protocol: udp
         mode: host
     volumes:
-      - sql_init:/var/lib/mysql
+      - db:/var/lib/mysql
+      - sql_init:/data/sql
     depends_on:
       - db
 
