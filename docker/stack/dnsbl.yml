@@ -109,7 +109,7 @@ services:
     volumes:
       - db:/var/lib/mysql
       - crontabs:/var/spool/cron/crontabs
-      - scripts:/scripts      
+      - cron_scripts:/scripts      
     depends_on:
       - db
 
@@ -187,7 +187,7 @@ volumes:
       o: bind
       device: /srv/data/docker/containers/dnsbl-docker-app/cron/crontabs
 
-  scripts:
+  cron_scripts:
     driver: local
     driver_opts:
       type: none
