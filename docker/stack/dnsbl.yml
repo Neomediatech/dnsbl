@@ -108,6 +108,8 @@ services:
       << : *common-vars    
     volumes:
       - db:/var/lib/mysql
+      - crontabs:/var/spool/cron/crontabs
+      - scripts:/scripts      
     depends_on:
       - db
 
@@ -178,3 +180,16 @@ volumes:
       o: bind
       device: /srv/data/docker/containers/dnsbl-docker-app/db/sql
   
+  crontabs:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /srv/data/docker/containers/dnsbl-docker-app/cron/crontabs
+
+  scripts:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /srv/data/docker/containers/dnsbl-docker-app/cron/scripts
