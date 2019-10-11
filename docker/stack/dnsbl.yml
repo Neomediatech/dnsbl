@@ -6,9 +6,9 @@ version: '3.7'
 
 x-environment: &common-vars
     TZ: Europe/Rome
-      MYSQL_ROOT_PASSWORD_FILE: /var/lib/mysql/db-root.pwd
-      MYSQL_PASSWORD_FILE: /var/lib/mysql/db-user.pwd
-      MYSQL_USER_FILE: /var/lib/mysql/db-user.txt
+    MYSQL_ROOT_PASSWORD_FILE: /var/lib/mysql/db-root.pwd
+    MYSQL_PASSWORD_FILE: /var/lib/mysql/db-user.pwd
+    MYSQL_USER_FILE: /var/lib/mysql/db-user.txt
 
 services:
   db:
@@ -101,6 +101,16 @@ services:
     depends_on:
       - db
 
+  cron:
+    image: neomediatech/cron
+    hostname: cron
+    environment:
+      << : *common-vars    
+    volumes:
+      - db:/var/lib/mysql
+    depends_on:
+      - db
+
   powerdns:
     image: neomediatech/powerdns
     hostname: powerdns
@@ -167,4 +177,4 @@ volumes:
       type: none
       o: bind
       device: /srv/data/docker/containers/dnsbl-docker-app/db/sql
-    
+  
