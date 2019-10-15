@@ -147,7 +147,6 @@ services:
     hostname: pdnsmanager
     environment:
       << : *common-vars
-      DB_HOST: ${MYSQL_HOST}
     ports:
       - target: 80
         published: 28082
