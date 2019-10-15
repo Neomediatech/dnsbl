@@ -1,3 +1,4 @@
+USE `pdns`;
 
 --
 -- Table structure for table `permissions`
