@@ -10,10 +10,13 @@ x-environment: &common-vars
     MYSQL_PASSWORD_FILE: /var/lib/mysql/db-user.pwd
     MYSQL_USER_FILE: /var/lib/mysql/db-user.txt
 
+environment:
+  MYSQL_HOSTNAME: db
+
 services:
   db:
     image: mariadb:10
-    hostname: db
+    hostname: ${MYSQL_HOSTNAME}
     deploy:
       replicas: 1    
     command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW
@@ -89,7 +92,7 @@ services:
     hostname: phpmyadmin
     environment:
       << : *common-vars    
-      PMA_HOST: db
+      PMA_HOST: ${MYSQL_HOSTNAME}
       PMA_PORT: 3306
     ports:
       - target: 80
@@ -118,7 +121,7 @@ services:
     hostname: powerdns
     environment:
       << : *common-vars    
-      DB_HOST: db
+      DB_HOST: ${MYSQL_HOSTNAME}
       DB_NAME: pdns
     ports:
       - target: 53
@@ -139,7 +142,9 @@ services:
     image: neomediatech/pdnsmanager
     hostname: pdnsmanager
     environment:
-      << : *common-vars    
+      << : *common-vars
+      DB_HOST: ${MYSQL_HOSTNAME}
+      DB_NAME: pdnsmanager
     ports:
       - target: 80
         published: 28082
