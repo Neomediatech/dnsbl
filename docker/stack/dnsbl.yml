@@ -2,16 +2,19 @@
 # pull dnsbl git repository from https://github.com/Neomediatech/dnsbl/archive/master.zip ,
 #   unzip it and put spamikaze folder on common volume
 # may be config/config.php file must be moved in php/ direcotry?
+# env variables to declare on portainer stack:
+#  MYSQL_HOSTNAME: db (name of MYSQL instance)
+#  STACK_BASE_PATH: /srv/data/docker/containers/test-dnsbl/ (base path of the stack in the host)
+# don't forget to create all folders!
+#
+
 version: '3.7'
 
-x-environment: &common-vars
-    TZ: Europe/Rome
-    MYSQL_ROOT_PASSWORD_FILE: /var/lib/mysql/db-root.pwd
-    MYSQL_PASSWORD_FILE: /var/lib/mysql/db-user.pwd
-    MYSQL_USER_FILE: /var/lib/mysql/db-user.txt
-
-environment:
-  MYSQL_HOSTNAME: db
+x-envs: &common-vars
+  TZ: Europe/Rome
+  MYSQL_ROOT_PASSWORD_FILE: /var/lib/mysql/db-root.pwd
+  MYSQL_PASSWORD_FILE: /var/lib/mysql/db-user.pwd
+  MYSQL_USER_FILE: /var/lib/mysql/db-user.txt
 
 services:
   db:
@@ -83,7 +86,7 @@ services:
         mode: host
     volumes:
       - scripts:/var/www/html:ro
-      - /srv/data/docker/containers/dnsbl-docker-app/web/nginx/conf/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ${STACK_BASE_PATH}/web/nginx/conf/nginx.conf:/etc/nginx/nginx.conf:ro
     depends_on:
       - app
 
@@ -151,7 +154,7 @@ services:
         protocol: tcp
         mode: host
     volumes:
-      - /srv/data/docker/containers/dnsbl-docker-app/pdnsmanager/config/:/etc/pdnsmanager/
+      - ${STACK_BASE_PATH}/pdnsmanager/config/:/etc/pdnsmanager/
     depends_on:
       - db
       - powerdns
@@ -162,39 +165,39 @@ volumes:
     driver_opts:
       type: none
       o: bind
-      device: /srv/data/docker/containers/dnsbl-docker-app/redis/data
+      device: ${STACK_BASE_PATH}/redis/data
 
   db:
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: /srv/data/docker/containers/dnsbl-docker-app/db/data
+      device: ${STACK_BASE_PATH}/db/data
 
   scripts:
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: /srv/data/docker/containers/dnsbl-docker-app/scripts/data
+      device: ${STACK_BASE_PATH}/scripts/data
       
   sql_init:
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: /srv/data/docker/containers/dnsbl-docker-app/db/sql
+      device: ${STACK_BASE_PATH}/db/sql
   
   crontabs:
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: /srv/data/docker/containers/dnsbl-docker-app/cron/crontabs
+      device: ${STACK_BASE_PATH}/cron/crontabs
 
   cron_scripts:
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: /srv/data/docker/containers/dnsbl-docker-app/cron/scripts
+      device: ${STACK_BASE_PATH}/cron/scripts
