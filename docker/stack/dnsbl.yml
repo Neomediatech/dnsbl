@@ -4,7 +4,7 @@
 # may be config/config.php file must be moved in php/ direcotry?
 # env variables to declare on portainer stack:
 #  MYSQL_HOST: db (name of MYSQL instance)
-#  STACK_BASE_PATH: /srv/data/docker/containers/test-dnsbl/ (base path of the stack in the host)
+#  STACK_BASE_PATH: /srv/data/docker/containers/dnsbl-docker-app/ (base path of the stack in the host)
 # don't forget to create all folders!
 #
 
