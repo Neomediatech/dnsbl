@@ -15,11 +15,12 @@ x-envs: &common-vars
   MYSQL_ROOT_PASSWORD_FILE: /var/lib/mysql/db-root.pwd
   MYSQL_PASSWORD_FILE: /var/lib/mysql/db-user.pwd
   MYSQL_USER_FILE: /var/lib/mysql/db-user.txt
+  MYSQL_HOST: ${MYSQL_HOST:-db}
 
 services:
   db:
     image: mariadb:10
-    hostname: ${MYSQL_HOSTNAME}
+    hostname: ${MYSQL_HOST}
     deploy:
       replicas: 1    
     command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW
@@ -95,7 +96,7 @@ services:
     hostname: phpmyadmin
     environment:
       << : *common-vars    
-      PMA_HOST: ${MYSQL_HOSTNAME}
+      PMA_HOST: ${MYSQL_HOST}
       PMA_PORT: 3306
     ports:
       - target: 80
@@ -124,7 +125,7 @@ services:
     hostname: powerdns
     environment:
       << : *common-vars    
-      DB_HOST: ${MYSQL_HOSTNAME}
+      DB_HOST: ${MYSQL_HOST}
       DB_NAME: pdns
     ports:
       - target: 53
@@ -146,7 +147,7 @@ services:
     hostname: pdnsmanager
     environment:
       << : *common-vars
-      DB_HOST: ${MYSQL_HOSTNAME}
+      DB_HOST: ${MYSQL_HOST}
       DB_NAME: pdnsmanager
     ports:
       - target: 80
