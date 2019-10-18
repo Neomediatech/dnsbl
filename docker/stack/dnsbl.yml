@@ -142,18 +142,21 @@ services:
     depends_on:
       - db
 
-  pdnsmanager:
-    image: neomediatech/pdnsmanager
-    hostname: pdnsmanager
+  pdns-admin:
+    image: powerdns-admin-alpine
+    hostname: pdns-admin
     environment:
       << : *common-vars
+      PDA_DB_TYPE: sqlite
     ports:
-      - target: 80
-        published: 28082
+      - target: 9191
+        published: 9191
         protocol: tcp
         mode: host
     volumes:
-      - ${STACK_BASE_PATH}/pdnsmanager/config/:/etc/pdnsmanager/
+      - ${STACK_BASE_PATH}/pdns-admin/app/static/.webassets-cache/:/var/www/powerdns-admin/app/static/.webassets-cache/
+      - ${STACK_BASE_PATH}/pdns-admin/app/static/generated/:/var/www/powerdns-admin/app/static/generated/
+      - ${STACK_BASE_PATH}/pdns-admin/logs/:/var/www/powerdns-admin/logs/
     depends_on:
       - db
       - powerdns
@@ -200,3 +203,17 @@ volumes:
       type: none
       o: bind
       device: ${STACK_BASE_PATH}/cron/scripts
+
+  localtime:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /etc/localtime
+
+  timezone:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /etc/timezone
