@@ -168,6 +168,7 @@ services:
       - ${STACK_BASE_PATH}/pdns-admin/app/static/.webassets-cache/:/var/www/powerdns-admin/app/static/.webassets-cache/
       - ${STACK_BASE_PATH}/pdns-admin/app/static/generated/:/var/www/powerdns-admin/app/static/generated/
       - ${STACK_BASE_PATH}/pdns-admin/logs/:/var/www/powerdns-admin/logs/
+      - ${STACK_BASE_PATH}/pdns-admin/db/:/var/www/powerdns-admin/db/
     depends_on:
       - db
       - powerdns
