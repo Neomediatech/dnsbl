@@ -6,6 +6,9 @@
 #  MYSQL_HOST: db (name of MYSQL instance)
 #  STACK_BASE_PATH: /srv/data/docker/containers/dnsbl-docker-app/ (base path of the stack in the host)
 #  PDNS_API_KEY: VeryLongAndStrongApiKeySecretWithManyCharacters
+#  PDNS_HOSTNAME: powerdns
+#  PDNS_API_URL: http://${PDNS_HOSTNAME}:8081/
+#
 # don't forget to create all folders!
 #
 
@@ -20,6 +23,8 @@ x-envs: &common-vars
 
 x-pdns: &pdns-vars
   PDNS_API_KEY: ${PDNS_API_KEY:-VeryLongAndStrongApiKeySecretWithManyCharacters}
+  PDNS_HOSTNAME: ${PDNS_HOSTNAME:-powerdns}
+  PDNS_API_URL: ${PDNS_API_URL:-http://${PDNS_HOSTNAME}:8081/}
   
 services:
   db:
@@ -126,12 +131,12 @@ services:
 
   powerdns:
     image: neomediatech/powerdns
-    hostname: powerdns
+    hostname: ${PDNS_HOSTNAME}
     environment:
       << : *common-vars    
+      << : *pdns-vars
       DB_HOST: ${MYSQL_HOST}
       DB_NAME: pdns
-      PDNS_API_KEY: ${PDNS_API_KEY}
     ports:
       - target: 53
         published: 28053
@@ -152,8 +157,8 @@ services:
     hostname: pdns-admin
     environment:
       << : *common-vars
+      << : *pdns-vars
       PDA_DB_TYPE: sqlite
-      PDNS_API_KEY: ${PDNS_API_KEY}
     ports:
       - target: 9191
         published: 9191
