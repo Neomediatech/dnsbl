@@ -5,6 +5,7 @@
 # env variables to declare on portainer stack:
 #  MYSQL_HOST: db (name of MYSQL instance)
 #  STACK_BASE_PATH: /srv/data/docker/containers/dnsbl-docker-app/ (base path of the stack in the host)
+#  PDNS_API_KEY: VeryLongAndStrongApiKeySecretWithManyCharacters
 # don't forget to create all folders!
 #
 
@@ -17,6 +18,9 @@ x-envs: &common-vars
   MYSQL_USER_FILE: /var/lib/mysql/db-user.txt
   MYSQL_HOST: ${MYSQL_HOST:-db}
 
+x-pdns: &pdns-vars
+  PDNS_API_KEY: ${PDNS_API_KEY:-VeryLongAndStrongApiKeySecretWithManyCharacters}
+  
 services:
   db:
     image: mariadb:10
@@ -127,6 +131,7 @@ services:
       << : *common-vars    
       DB_HOST: ${MYSQL_HOST}
       DB_NAME: pdns
+      PDNS_API_KEY: ${PDNS_API_KEY}
     ports:
       - target: 53
         published: 28053
@@ -148,6 +153,7 @@ services:
     environment:
       << : *common-vars
       PDA_DB_TYPE: sqlite
+      PDNS_API_KEY: ${PDNS_API_KEY}
     ports:
       - target: 9191
         published: 9191
