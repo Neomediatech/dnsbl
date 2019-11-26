@@ -24,7 +24,7 @@ This folders must exists prior to start the stack.
 2. Pull this repo, unpack and move spamikaze folder in scripts/data:   
 ` cd /srv/data/docker/containers/dnsbl-docker-app/scripts/data ; wget https://github.com/Neomediatech/dnsbl/archive/master.zip ; unzip master.zip ; mv dnsbl-master/spamikaze . `   
 3. Move Nginx config in web/nginx/conf:   
-` mv dnsbl-master/nginx/nginx.conf web/nginx/conf/ `   
+` mv dnsbl-master/nginx/nginx.conf ../../web/nginx/conf/ `   
 4. Create and compile this four files:   
 ```
    db/data/db-name.txt    -> database name
