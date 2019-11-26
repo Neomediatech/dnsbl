@@ -33,7 +33,7 @@ This folders must exists prior to start the stack.
    db/data/db-root.pwd    -> password for the mysql/mariadb root user    
 ```   
 5. Move sql/sh files in db/sql:
-` mv dnsbl-master/sql/*.s{ql,h} db/sql/ `   
+` mv dnsbl-master/sql/*.s{ql,h} ../../db/sql/ `   
 6. Edit scripts/data/spamikaze/config/config.php to fit database name, user and password.   
 16. Cleaning:   
   rm -r dnsbl-master master.zip   
